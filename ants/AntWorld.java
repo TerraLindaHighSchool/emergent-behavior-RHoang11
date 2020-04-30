@@ -18,5 +18,18 @@ public class AntWorld extends World
     {
         super(SIZE, SIZE, 1);
         setPaintOrder(Ant.class, AntHill.class);
+        prepare();
+    }
+
+    /**
+     * Prepare the world for the start of the program.
+     * That is: create the initial objects and add them to the world.
+     */
+    private void prepare()
+    {
+        AntHill antHill = new AntHill();
+        addObject(antHill,168,169);
+        Food food = new Food();
+        addObject(food,460,370);
     }
 }
