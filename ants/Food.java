@@ -17,6 +17,7 @@
         public Food()
         {
             image = new GreenfootImage(SIZE, SIZE);
+            updateImage();
         }
         /**
          * Act - do whatever the Food wants to do. This method is called whenever
@@ -24,13 +25,12 @@
          */
         public void act() 
         {
-            removeCrumb();
         }    
         
         private void updateImage()
         {
             Random random = new Random();
-            for(int i = 0; i <= 5; i++)
+            for(int i = 0; i <= crumbs; i++)
                 {
                 int stDev = SIZE / 6;
                 int x = (int) (stDev * random.nextGaussian( ) + 3 * stDev);
@@ -61,15 +61,13 @@
         
         public void removeCrumb()
         { 
-             for (int i = 100; i > 0; i--)
+            image.clear();
+            updateImage();
+            crumbs--; 
+            if (crumbs == 0)
             {
                 image.clear();
-                updateImage();
-                crumbs--; 
             }
-            if (crumbs == 0)
-                {
-                    image.clear();
-                }
+            
         }
 }
