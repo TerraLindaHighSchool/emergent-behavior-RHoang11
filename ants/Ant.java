@@ -12,6 +12,10 @@ public class Ant extends Creature
     private boolean carryingFood;
     private GreenfootImage image1;
     private GreenfootImage image2;
+    private final int MAX_PH_AVAILABLE = 16;
+    private final int TIME_FOLLOWING_TRAIL = 30;
+    private int phAvailable;
+    private int followTrailTimeRemaining;
     
     /**
      * Create an ant with a given home hill. The initial speed is zero (not moving).
@@ -21,6 +25,8 @@ public class Ant extends Creature
         setHomeHill(home);
         image1 = getImage();
         image2 = new GreenfootImage("ant-with-food.gif");
+        phAvailable = MAX_PH_AVAILABLE;
+        followTrailTimeRemaining = 0;
     }
 
     /**
@@ -54,6 +60,19 @@ public class Ant extends Creature
     }
     private void searchForFood()
     {
+        if(followTrailTimeRemaining == 0)
+        {
+            if(smellsPheromone())
+            {
+                walkTowardsPheromoneCenter();
+            }
+            randomWalk();
+        }
+        else
+        {
+            followTrailTimeRemaining--;
+            walkAwayFromHome();
+        }
         randomWalk();
         checkForFood();
     }
@@ -62,6 +81,7 @@ public class Ant extends Creature
         if(carryingFood == true)
         {
             walkTowardsHome();
+            handlePheromoneDrop();
             if(atHome())
             {
                 setImage(image1);
@@ -72,6 +92,44 @@ public class Ant extends Creature
         else
         {
             searchForFood();
+        }
+    }
+    private void handlePheromoneDrop()
+    {
+        if(phAvailable == MAX_PH_AVAILABLE)
+        {
+            Pheromone pheromone = new Pheromone();
+            getWorld().addObject(pheromone,getX(),getY());
+            phAvailable = 0;
+        }
+        else
+        {
+            phAvailable++;
+        }
+    }
+    
+    private boolean smellsPheromone()
+    {
+        if(isTouching(Pheromone.class))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    
+    private void walkTowardsPheromoneCenter()
+    {
+        Actor ph = getOneIntersectingObject(Pheromone.class);
+        if(ph != null)
+        {
+            headTowards(ph);
+        }
+        if(getX() == ph.getX() && getY() == ph.getY())
+        {
+            followTrailTimeRemaining = TIME_FOLLOWING_TRAIL;
         }
     }
 }

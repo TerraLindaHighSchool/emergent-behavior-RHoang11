@@ -20,7 +20,15 @@ public class AntWorld extends World
         setPaintOrder(Ant.class, AntHill.class);
         prepare();
     }
-
+    
+    public void act()
+    {
+        if(getObjects(Food.class).size() == 0 && getObjects(Pheromone.class).size() == 0)
+        {
+            Greenfoot.stop();
+        }
+    }
+    
     /**
      * Prepare the world for the start of the program.
      * That is: create the initial objects and add them to the world.
@@ -61,3 +69,5 @@ public class AntWorld extends World
         addObject(food11,51,532);
     }
 }
+    
+
