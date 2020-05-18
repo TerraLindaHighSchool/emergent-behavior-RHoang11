@@ -66,7 +66,7 @@
             crumbs--; 
             if (crumbs == 0)
             {
-                image.clear();
+                getWorld().removeObject(this);
             }
             
         }
